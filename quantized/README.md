@@ -19,7 +19,7 @@ RISC-V mainline, which we did not test and make no claim about.
 |---|---|---|---|
 | CHIP-8 arithmetic exactness | **10/10** | 10 fixed seeded problems | author's MPS box |
 | CPU exactness, independent repack | **10/10** | 10 of 10 | Chilly's RTX 3060 Ti |
-| chip-token positions reproduced | **23,507**, 0 divergences | 10 rows, `lock_error: null` | both boxes |
+| fed positions reproduced | **24,660**, 0 divergences | 10 rows, `lock_error: null` | both boxes |
 | CUDA exactness (end-to-end) | **1/1** | 1 | Chilly's RTX 3060 Ti |
 | 4-bit host-layer invariance | **10/10**, all ten `<tool_response>` values **bit-identical** | 10 | author's MPS box |
 | resident, int4 host + CSR chip | **3.7708 GiB** | module sum, 5 terms | author's MPS box |
@@ -45,27 +45,31 @@ blocked on card capacity, not on willingness.
 subsets of the upstream arithmetic sets, chosen to be checkable by hand — **not the 40-problem-per-set
 suite in the upstream README**, and the two should not be compared.
 
-### Every chip token was checked, not just the answers
+### Every fed position was checked, not just the answers
 
 **A run that lands on the right answer can still contain a divergence somewhere along the way.** So every
 chip token is compared against a reference model of the machine **as it is generated** — `lock=Session` in
 `chipformer.rv.chat.generate` stops at the first token that differs and records `lock_error` with the
 position and both tokens.
 
-**Across the closed CPU run that is 23,507 chip-token positions over ten problems, and `lock_error` is
-`null` on all ten rows.** Not ten lucky answers — **twenty-three thousand positions reproduced, none
+**Across the closed CPU run that is 24,660 fed positions over ten problems, and `lock_error` is
+`null` on all ten rows.** Not ten lucky answers — **twenty-four thousand positions reproduced, none
 diverging.**
 
 **The denominator, stated both ways, because coverage is not the same as rate:**
 
 ```
-0 mismatches over 23,507 chip steps
-run total:  24,670 positions  =  23,507 chip  +  1,163 non-chip  (951 n_qwen + 212 locked-run)
+0 mismatches over 24,660 fed positions
+  = 23,507 where the circuit emitted the token
+  +    951 host-chosen text positions
+  +    202 locked-run positions
 ```
 
-**A comparison exists only where the chip ran.** At those 1,163 host steps there is nothing that could
-mismatch, so quoting "0 over 24,670" would claim coverage of positions the instrument never read. Both
-numbers belong in the sentence; only one of them belongs in the numerator's denominator.
+**Two corrections are folded in here, both from an independent read of `chat.py`. The machine steps
+`_exec_step` on *every* fed position, not only on the ones it classifies as chip tokens — so the honest
+population is the fed count, not the chip count. And these are positions, not *writes*: the circuit
+computes everywhere but commits only at a record's final token, and only store records write. The claim is
+therefore "0 mismatches over 24,660 fed positions", which is the stronger claim and the true one.**
 
 **And this is a live check, not a stored one.** The comparison happens during generation against a running
 reference; **the run does not retain the machine's write stream**, so a third party cannot replay these
