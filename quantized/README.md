@@ -18,10 +18,27 @@ RISC-V mainline, which we did not test and make no claim about.
 | measurement | result | `n` | where |
 |---|---|---|---|
 | CHIP-8 arithmetic exactness | **10/10** | 10 fixed seeded problems | author's MPS box |
-| CPU exactness, independent repack | **7/7** | 7 of a 10-problem run | Chilly's RTX 3060 Ti |
+| CPU exactness, independent repack | **10/10** | 10 of 10 | Chilly's RTX 3060 Ti |
 | CUDA exactness (end-to-end) | **1/1** | 1 | Chilly's RTX 3060 Ti |
 | 4-bit host-layer invariance | **10/10**, all ten `<tool_response>` values **bit-identical** | 10 | author's MPS box |
 | resident, int4 host + CSR chip | **3.7708 GiB** | module sum, 5 terms | author's MPS box |
+
+**The CPU run closed at ten rows:** `arith-0…arith-9`, **10/10 exact**, 23,507 chip tokens,
+13,911.6 s wall, in one file whose sha256 is `8ed8fb4b1c3fb191…`. That file spans a kill and a resume, so
+the append-only claim is checkable rather than asserted: `head -c 87999` hashes to `6f427f8329be8f86…`,
+the digest the pre-kill file carried **before** the resume started.
+
+**The two implementations agree on every id.** That is the sentence this fork stands behind: **two
+independent implementations of one container format, agreeing on every id.**
+
+**On the CPU run, `head_mismatch` runs 15–24 per problem out of 2,041–3,184 generated positions —
+0.47–0.99% per row — and it is the host's argmax differing from the machine's decoded token, not an error
+rate.** Every machine RAM read is identical; the wording drifts.
+
+**And one thing we have not measured:** whether the dense path could have carried the same answer.
+The chip-token count is backend-invariant — 2,298 on three runs across two backends — **and whether the
+answer depended on the chip is not yet measured.** A zeroed-chip control exists in the harness and is
+blocked on card capacity, not on willingness.
 
 **Read each row as a sample of the size in its `n` column, not as a benchmark.** These are seeded
 subsets of the upstream arithmetic sets, chosen to be checkable by hand — **not the 40-problem-per-set
