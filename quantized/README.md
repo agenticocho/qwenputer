@@ -39,18 +39,29 @@ rate.** Every machine RAM read is identical; the wording drifts.
 **And one thing that is widely misstated, including by us until we read the code: the machine computes its
 own program counter.** `PC` is a RAM cell (`spec.py:14`, `PC = 0x1011`), and `chip8_q35.py:714–726` builds
 `next_pc` **inside the circuit** — selecting over `skip`, `jump`, `00EE` return and `BNNN` — then writes it
-back at `:1142`. **The host supplies ticks, not instructions.**
+back at `:1142`. **The host supplies ticks and key writes, not instructions.** The reference emulator in `lib/`
+does write `PC` (`lib/macros.py:103`, `:179`) — but that is the verification trace the model's own records are
+checked against, not an input to them.
 
 **So the line repeated across this family — "the host still chooses every chip token, so it is really a
 matvec engine" — is true of a straight-line TPU and false of this build.** It is the field's central error,
 and it has been quoted about this artifact, in public, by two parties.
 
 **What remains unmeasured is narrower and harder:** whether anything *depends* on the machine. A zeroed-CSR
-control exists and is **confounded** — emptying the sparse matrices also deletes the weights that gate
-`<|chip_step|>` emission (`emit.py` passes `chip` into `clear_gate`/`beta`), so zero chip tokens is the
-mechanical consequence of the ablation, not an observation about the circuit. **The honest test is a state
-intervention — swap the ROM in RAM with the prompt byte-identical, flip one immediate byte at a conditional
-skip, or write `PC` to a non-instruction address — and none of those has been run.**
+control exists and is **confounded** — emptying the sparse matrices also deletes the switch that decides
+whether a chip token can be emitted at all. The row that decides it is the tau cancel, not `beta`:
+`chip8_q35.py:1346` builds the tau exit row as `[(1, c.mu, one)] + t_and([owner, is_text], -TAU_TEXT)`, and
+`emit.py:292` emits it as a `gate_proj` row (`row(b, lay, gate[u], K)`, `b` the coefficient vector of `c.mu`).
+With all 88 `CsrLinear` matrices zeroed the `mu` term is gone, so the `+1` that cancels `tau = -1` on a chip
+token never lands, and `merge.py:328` then applies `TAU_GAIN = 2.0**60` (`merge.py:117`: chip logits at text
+positions ~ `-2^20 / rms`). So zero chip tokens is the mechanical consequence of the ablation, not an
+observation about the circuit. `chip` does reach `emit.py:275 clear_gate` — but that is a datapath clear, and
+`emit.py:266 beta` is the head's write gate; neither is the token-class gate. The verdict is unchanged; the
+citation was.
+
+**The honest test is a state intervention — swap the ROM in RAM with the prompt byte-identical, flip one
+immediate byte at a conditional skip, or write `PC` to a non-instruction address — and none of those has been
+run.**
 
 **Read each row as a sample of the size in its `n` column, not as a benchmark.** These are seeded
 subsets of the upstream arithmetic sets, chosen to be checkable by hand — **not the 40-problem-per-set
