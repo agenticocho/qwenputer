@@ -72,10 +72,6 @@ reference; **the run does not retain the machine's write stream**, so a third pa
 23,507 positions offline — they would have to re-run. **qwenTPU's 1,139,712 is the replay-from-recorded-
 trace kind. This is the live kind.** Both are real; they are not the same evidence.
 
-**This is the same method other projects in this family apply at larger scale** — one reports 1,139,712
-positions with zero mismatches. **Ours is 23,507 and says so.** The shape of the check is identical:
-replay against a reference machine, position by position.
-
 ### What "3.7708 GiB" is, and what it is not
 
 **It is the sum of five module-level terms** — chip CSR 0.0255, embedding 0.9825, host int4 2.6929,
