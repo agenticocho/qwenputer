@@ -36,10 +36,21 @@ independent implementations of one container format, agreeing on every id.**
 0.47–0.99% per row — and it is the host's argmax differing from the machine's decoded token, not an error
 rate.** Every machine RAM read is identical; the wording drifts.
 
-**And one thing we have not measured:** whether the dense path could have carried the same answer.
-The chip-token count is backend-invariant — 2,298 on three runs across two backends — **and whether the
-answer depended on the chip is not yet measured.** A zeroed-chip control exists in the harness and is
-blocked on card capacity, not on willingness.
+**And one thing that is widely misstated, including by us until we read the code: the machine computes its
+own program counter.** `PC` is a RAM cell (`spec.py:14`, `PC = 0x1011`), and `chip8_q35.py:714–726` builds
+`next_pc` **inside the circuit** — selecting over `skip`, `jump`, `00EE` return and `BNNN` — then writes it
+back at `:1142`. **The host supplies ticks, not instructions.**
+
+**So the line repeated across this family — "the host still chooses every chip token, so it is really a
+matvec engine" — is true of a straight-line TPU and false of this build.** It is the field's central error,
+and it has been quoted about this artifact, in public, by two parties.
+
+**What remains unmeasured is narrower and harder:** whether anything *depends* on the machine. A zeroed-CSR
+control exists and is **confounded** — emptying the sparse matrices also deletes the weights that gate
+`<|chip_step|>` emission (`emit.py` passes `chip` into `clear_gate`/`beta`), so zero chip tokens is the
+mechanical consequence of the ablation, not an observation about the circuit. **The honest test is a state
+intervention — swap the ROM in RAM with the prompt byte-identical, flip one immediate byte at a conditional
+skip, or write `PC` to a non-instruction address — and none of those has been run.**
 
 **Read each row as a sample of the size in its `n` column, not as a benchmark.** These are seeded
 subsets of the upstream arithmetic sets, chosen to be checkable by hand — **not the 40-problem-per-set
