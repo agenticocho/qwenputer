@@ -73,7 +73,7 @@ therefore "0 mismatches over 24,660 fed positions", which is the stronger claim 
 
 **And this is a live check, not a stored one.** The comparison happens during generation against a running
 reference; **the run does not retain the machine's write stream**, so a third party cannot replay these
-23,507 positions offline — they would have to re-run. **qwenTPU's 1,139,712 is the replay-from-recorded-
+24,660 fed positions offline — they would have to re-run. **qwenTPU's 1,139,712 is the replay-from-recorded-
 trace kind. This is the live kind.** Both are real; they are not the same evidence.
 
 ### What "3.7708 GiB" is, and what it is not
