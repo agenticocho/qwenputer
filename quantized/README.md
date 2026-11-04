@@ -54,7 +54,10 @@ not a general claim that quantisation is safe for every Qwenputer build.
 ## What this fork does not claim
 
 - **Not** that the machine is general-purpose. We attempted a test of that and it was invalid; see below.
-- **Not** that 4-bit is faster. We measured memory, not throughput, on the quantised path.
+- **Not** that 4-bit is faster. We measured memory, not throughput, on the quantised path, and **no
+  `13.1×` throughput figure is published** — that ratio appeared in correspondence about a CPU-vs-CUDA
+  comparison on one box with `causal_conv1d` and `flash-linear-attention` absent on both sides, which is
+  a different question from a quantisation speed claim.
 - **Not** the mainline RISC-V model. **Version 1 (CHIP-8) only.**
 - **Not** a re-run of the upstream benchmark suite.
 
