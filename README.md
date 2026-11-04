@@ -21,6 +21,13 @@ riscv-tests suites.
 
 <p align="center"><img src="docs/benchmarks-arith.png" alt="Qwenputer vs base Qwen3.5-4B and base with a Python tool on NUPA and DeepMind arithmetic sets." width="100%"></p>
 
+## Quantisation (this fork)
+
+**[`quantized/`](quantized/) holds a 4-bit quantisation of Version 1 (CHIP-8): 3.7708 GiB resident,
+exact at 10/10 on a seeded subset, with the container format specified and every row carrying its `n`.**
+It applies to the CHIP-8 checkpoint only — not the RISC-V mainline. Read
+[`quantized/README.md`](quantized/README.md) before using any number from it.
+
 ## Benchmarks
 
 Greedy decoding, 40 problems per set. Each row compares base Qwen3.5-4B and Qwenputer on the same
