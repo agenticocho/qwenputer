@@ -19,6 +19,7 @@ RISC-V mainline, which we did not test and make no claim about.
 |---|---|---|---|
 | CHIP-8 arithmetic exactness | **10/10** | 10 fixed seeded problems | author's MPS box |
 | CPU exactness, independent repack | **10/10** | 10 of 10 | Chilly's RTX 3060 Ti |
+| chip-token positions reproduced | **23,507**, 0 divergences | 10 rows, `lock_error: null` | both boxes |
 | CUDA exactness (end-to-end) | **1/1** | 1 | Chilly's RTX 3060 Ti |
 | 4-bit host-layer invariance | **10/10**, all ten `<tool_response>` values **bit-identical** | 10 | author's MPS box |
 | resident, int4 host + CSR chip | **3.7708 GiB** | module sum, 5 terms | author's MPS box |
