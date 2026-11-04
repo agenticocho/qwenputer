@@ -120,7 +120,7 @@ MacBook Pro M4).
 **Not covered by that MIT licence: the game ROMs.** Upstream ships 119 CHIP-8 ROMs under `games/roms`,
 and upstream's own LICENSE says so explicitly — they belong to their authors, not to the code licence.
 Of the 119: **50 are CC0** (CHIP-8 Archive) and **69 come from the Revival Studios pack, described
-upstream as "freely distributable in its original form"**. They are here because a fork carries the
+upstream as "can be freely distributed in its original form"**. They are here because a fork carries the
 whole tree; **they are not part of the quantisation and none of them belong in a weights repository.**
 Attribution for every one is in [`games/ATTRIBUTION.md`](../games/ATTRIBUTION.md).
 
@@ -137,3 +137,7 @@ shared layers are left in bf16.** Qwen's own weights are unmodified in value; th
 grant trademark rights — nothing here represents the upstream authors' endorsement.
 
 **If you redistribute the quantised weights, ship this section with them.**
+
+---
+
+**On issue numbers:** the issues live on upstream, not on this fork — the fork has issues disabled, so a bare number here would 404. Ours is [upstream issue #6](https://github.com/divagr18/qwenputer/issues/6).
