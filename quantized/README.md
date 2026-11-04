@@ -117,7 +117,18 @@ MacBook Pro M4).
 
 **Code in this fork: MIT**, as upstream, with our additions under the same terms.
 
+**Not covered by that MIT licence: the game ROMs.** Upstream ships 119 CHIP-8 ROMs under `games/roms`,
+and upstream's own LICENSE says so explicitly — they belong to their authors, not to the code licence.
+Of the 119: **50 are CC0** (CHIP-8 Archive) and **69 come from the Revival Studios pack, described
+upstream as "freely distributable in its original form"**. They are here because a fork carries the
+whole tree; **they are not part of the quantisation and none of them belong in a weights repository.**
+Attribution for every one is in [`games/ATTRIBUTION.md`](../games/ATTRIBUTION.md).
+
 **Weights: Apache-2.0**, inherited from `Qwen/Qwen3.5-4B` via `divagr1925/Qwen3.5-4B-Qwenputer-CHIP8`.
+**The chain was checked, not assumed:** all three cards (`Qwen3.5-4B-Base` → `Qwen3.5-4B` → the CHIP-8
+build) declare Apache-2.0 and ship the same licence text, and **none of the three carries a `NOTICE`
+file**, so §4(d) has nothing to propagate. Redistribution is permitted; §4(a) is this section, §4(b) is
+the sentence below.
 **Changes made by this fork: the host transformer layers 11–42 are quantised to 4-bit with NF4 absmax
 group size 64, the chip layers and embeddings are stored in a sparse CSR container, and the generator's
 shared layers are left in bf16.** Qwen's own weights are unmodified in value; they are quantised.
