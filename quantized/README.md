@@ -56,6 +56,22 @@ position and both tokens.
 `null` on all ten rows.** Not ten lucky answers — **twenty-three thousand positions reproduced, none
 diverging.**
 
+**The denominator, stated both ways, because coverage is not the same as rate:**
+
+```
+0 mismatches over 23,507 chip steps
+run total:  24,670 positions  =  23,507 chip  +  1,163 non-chip  (951 n_qwen + 212 locked-run)
+```
+
+**A comparison exists only where the chip ran.** At those 1,163 host steps there is nothing that could
+mismatch, so quoting "0 over 24,670" would claim coverage of positions the instrument never read. Both
+numbers belong in the sentence; only one of them belongs in the numerator's denominator.
+
+**And this is a live check, not a stored one.** The comparison happens during generation against a running
+reference; **the run does not retain the machine's write stream**, so a third party cannot replay these
+23,507 positions offline — they would have to re-run. **qwenTPU's 1,139,712 is the replay-from-recorded-
+trace kind. This is the live kind.** Both are real; they are not the same evidence.
+
 **This is the same method other projects in this family apply at larger scale** — one reports 1,139,712
 positions with zero mismatches. **Ours is 23,507 and says so.** The shape of the check is identical:
 replay against a reference machine, position by position.
